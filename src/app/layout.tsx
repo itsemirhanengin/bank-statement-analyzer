@@ -18,8 +18,8 @@ const bodoniModa = Bodoni_Moda({
 });
 
 export const metadata: Metadata = {
-  title: "Expense Analyzer",
-  description: "Analyze your bank statements and expenses",
+  title: "Bank Statement Analyzer",
+  description: "Analyze your bank statements and spending",
 };
 
 export default function RootLayout({

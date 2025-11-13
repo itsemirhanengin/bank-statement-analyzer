@@ -3,15 +3,12 @@
 import { useState } from "react";
 import FileUploader from "@/components/file-uploader";
 import AnalysisResults from "@/components/analysis-results";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertTriangle } from "lucide-react";
 
 export default function Home() {
-  const [apiKey, setApiKey] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [extractedText, setExtractedText] = useState<string | undefined>(
     undefined
@@ -22,7 +19,7 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
 
   const handleAnalyze = async () => {
-    if (!file || !apiKey) return;
+    if (!file) return;
 
     setIsAnalyzing(true);
     setError(null);
@@ -30,7 +27,6 @@ export default function Home() {
     try {
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("apiKey", apiKey);
       if (extractedText) {
         formData.append("pdfText", extractedText);
       }
@@ -67,31 +63,17 @@ export default function Home() {
       <main className="max-w-4xl mx-auto space-y-8">
         <div>
           <h1 className="text-4xl font-bold mb-2 font-heading">
-            Expense Analyzer
+            Bank Statement Analyzer
           </h1>
           <p className="text-muted-foreground">
             {showResults
               ? "Your comprehensive financial analysis"
-              : "Upload your bank statement to analyze expenses"}
+              : "Upload your bank statement to analyze your spending"}
           </p>
         </div>
 
         {!showResults && (
           <>
-            <div className="space-y-2">
-              <Label htmlFor="api-key">AI Gateway API Key</Label>
-              <Input
-                id="api-key"
-                type="password"
-                placeholder="Enter your AI Gateway API Key"
-                value={apiKey}
-                onChange={(e) => setApiKey(e.target.value)}
-              />
-              <p className="text-xs text-muted-foreground">
-                Your API key is required to analyze the bank statement
-              </p>
-            </div>
-
             <FileUploader onFileChange={handleFileChange} />
 
             {error && (
@@ -105,7 +87,7 @@ export default function Home() {
               <Button
                 size="lg"
                 onClick={handleAnalyze}
-                disabled={!apiKey || !file || isAnalyzing}
+                disabled={!file || isAnalyzing}
               >
                 {isAnalyzing ? (
                   <>
@@ -128,7 +110,6 @@ export default function Home() {
                 onClick={() => {
                   setShowResults(false);
                   setFile(null);
-                  setApiKey("");
                   setAnalysisData(null);
                   setError(null);
                 }}
