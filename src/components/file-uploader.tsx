@@ -15,7 +15,7 @@ export default function FileUploader({ onFileChange }: FileUploaderProps) {
 
   const extractPDFText = async (file: File): Promise<string> => {
     const pdfjsLib = await import("pdfjs-dist");
-    
+
     // Use local worker file from public directory
     if (!pdfjsLib.GlobalWorkerOptions.workerSrc) {
       pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdfjs/pdf.worker.min.mjs";
@@ -62,7 +62,7 @@ export default function FileUploader({ onFileChange }: FileUploaderProps) {
       ) {
         setFile(droppedFile);
         setIsProcessing(true);
-        
+
         try {
           if (droppedFile.type === "application/pdf") {
             const extractedText = await extractPDFText(droppedFile);
