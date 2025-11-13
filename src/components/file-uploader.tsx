@@ -1,64 +1,122 @@
-'use client'
+"use client";
 
-import { useState, useRef } from 'react'
-import { Button } from '@/components/ui/button'
+import { useState, useRef } from "react";
+import { Button } from "@/components/ui/button";
 
 interface FileUploaderProps {
-  onFileChange: (file: File | null) => void
+  onFileChange: (file: File | null, extractedText?: string) => void;
 }
 
 export default function FileUploader({ onFileChange }: FileUploaderProps) {
-  const [file, setFile] = useState<File | null>(null)
-  const [dragActive, setDragActive] = useState(false)
-  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [file, setFile] = useState<File | null>(null);
+  const [dragActive, setDragActive] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const extractPDFText = async (file: File): Promise<string> => {
+    const pdfjsLib = await import("pdfjs-dist");
+    
+    // Use local worker file from public directory
+    if (!pdfjsLib.GlobalWorkerOptions.workerSrc) {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdfjs/pdf.worker.min.mjs";
+    }
+
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+    let fullText = "";
+
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const textContent = await page.getTextContent();
+      const pageText = textContent.items
+        .map((item: unknown) => (item as { str: string }).str)
+        .join(" ");
+      fullText += pageText + "\n";
+    }
+
+    return fullText;
+  };
 
   const handleDrag = (e: React.DragEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    if (e.type === 'dragenter' || e.type === 'dragover') {
-      setDragActive(true)
-    } else if (e.type === 'dragleave') {
-      setDragActive(false)
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true);
+    } else if (e.type === "dragleave") {
+      setDragActive(false);
     }
-  }
+  };
 
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    setDragActive(false)
+  const handleDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
 
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      const droppedFile = e.dataTransfer.files[0]
+      const droppedFile = e.dataTransfer.files[0];
       if (
-        droppedFile.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
-        droppedFile.type === 'application/vnd.ms-excel'
+        droppedFile.type ===
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+        droppedFile.type === "application/vnd.ms-excel" ||
+        droppedFile.type === "application/pdf"
       ) {
-        setFile(droppedFile)
-        onFileChange(droppedFile)
+        setFile(droppedFile);
+        setIsProcessing(true);
+        
+        try {
+          if (droppedFile.type === "application/pdf") {
+            const extractedText = await extractPDFText(droppedFile);
+            console.log(extractedText);
+            onFileChange(droppedFile, extractedText);
+          } else {
+            onFileChange(droppedFile);
+          }
+        } catch (error) {
+          console.error("Error processing file:", error);
+          onFileChange(droppedFile);
+        } finally {
+          setIsProcessing(false);
+        }
       }
     }
-  }
+  };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault()
+  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
     if (e.target.files && e.target.files[0]) {
-      setFile(e.target.files[0])
-      onFileChange(e.target.files[0])
+      const selectedFile = e.target.files[0];
+      setFile(selectedFile);
+      setIsProcessing(true);
+
+      try {
+        if (selectedFile.type === "application/pdf") {
+          const extractedText = await extractPDFText(selectedFile);
+          console.log(extractedText);
+          onFileChange(selectedFile, extractedText);
+        } else {
+          onFileChange(selectedFile);
+        }
+      } catch (error) {
+        console.error("Error processing file:", error);
+        onFileChange(selectedFile);
+      } finally {
+        setIsProcessing(false);
+      }
     }
-  }
+  };
 
   const handleRemove = () => {
-    setFile(null)
-    onFileChange(null)
+    setFile(null);
+    onFileChange(null);
     if (fileInputRef.current) {
-      fileInputRef.current.value = ''
+      fileInputRef.current.value = "";
     }
-  }
+  };
 
   return (
     <div
       className={`relative border-2 border-dashed rounded-lg p-12 text-center transition-colors ${
-        dragActive ? 'border-primary bg-primary/5' : 'border-border'
+        dragActive ? "border-primary bg-primary/5" : "border-border"
       }`}
       onDragEnter={handleDrag}
       onDragLeave={handleDrag}
@@ -70,7 +128,7 @@ export default function FileUploader({ onFileChange }: FileUploaderProps) {
         id="file-upload"
         ref={fileInputRef}
         className="hidden"
-        accept=".xlsx,.xls"
+        accept=".xlsx,.xls,.pdf"
         onChange={handleChange}
       />
 
@@ -92,17 +150,23 @@ export default function FileUploader({ onFileChange }: FileUploaderProps) {
             </svg>
           </div>
           <div>
-            <h3 className="text-lg font-semibold mb-2">Upload Bank Statement</h3>
+            <h3 className="text-lg font-semibold mb-2">
+              Upload Bank Statement
+            </h3>
             <p className="text-sm text-muted-foreground mb-4">
-              Drag and drop your bank statement Excel file here, or click to browse
+              Drag and drop your bank statement file here, or click to browse
             </p>
             <label htmlFor="file-upload">
-              <Button type="button" onClick={() => document.getElementById('file-upload')?.click()}>
-                Choose File
+              <Button
+                type="button"
+                onClick={() => document.getElementById("file-upload")?.click()}
+                disabled={isProcessing}
+              >
+                {isProcessing ? "Processing..." : "Choose File"}
               </Button>
             </label>
             <p className="text-xs text-muted-foreground mt-2">
-              Supports .xlsx and .xls files
+              Supports .xlsx, .xls, and .pdf files
             </p>
           </div>
         </div>
@@ -135,5 +199,5 @@ export default function FileUploader({ onFileChange }: FileUploaderProps) {
         </div>
       )}
     </div>
-  )
+  );
 }

@@ -13,6 +13,7 @@ import { AlertTriangle } from "lucide-react"
 export default function Home() {
   const [apiKey, setApiKey] = useState('')
   const [file, setFile] = useState<File | null>(null)
+  const [extractedText, setExtractedText] = useState<string | undefined>(undefined)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [showResults, setShowResults] = useState(false)
   const [analysisData, setAnalysisData] = useState(null)
@@ -28,6 +29,9 @@ export default function Home() {
       const formData = new FormData()
       formData.append('file', file)
       formData.append('apiKey', apiKey)
+      if (extractedText) {
+        formData.append('pdfText', extractedText)
+      }
 
       const response = await fetch('/api/analyze', {
         method: 'POST',
@@ -47,6 +51,11 @@ export default function Home() {
     } finally {
       setIsAnalyzing(false)
     }
+  }
+
+  const handleFileChange = (newFile: File | null, text?: string) => {
+    setFile(newFile)
+    setExtractedText(text)
   }
 
   return (
@@ -75,7 +84,7 @@ export default function Home() {
               </p>
             </div>
 
-            <FileUploader onFileChange={setFile} />
+            <FileUploader onFileChange={handleFileChange} />
 
             {error && (
               <Alert className="border-red-200 bg-red-50 dark:bg-red-950">
