@@ -24,7 +24,6 @@ import {
   LineChart,
 } from "recharts";
 import {
-  TrendingUp,
   Calendar,
   Clock,
   AlertTriangle,
@@ -34,7 +33,6 @@ import {
   Target,
   Dumbbell,
   PiggyBank,
-  Sparkles,
   ArrowUpRight,
   ArrowDownRight,
 } from "lucide-react";
@@ -70,8 +68,6 @@ interface AnalysisResultsProps {
     insights: {
       weekendPattern: string;
       peakHours: string;
-      yearEndProjection: string;
-      seasonalAlert: string;
       emergencyFundRecommendation: string;
     };
     opportunities: Array<{
@@ -93,11 +89,6 @@ interface AnalysisResultsProps {
       description: string;
       type: string;
     }>;
-    forecast: {
-      projectedExpenses: number;
-      expectedIncome: number;
-      netPosition: number;
-    };
   };
 }
 
@@ -365,7 +356,7 @@ export default function AnalysisResults({ data }: AnalysisResultsProps) {
                           {formatMoney(opportunity.savings)}
                         </span>
                         <span className="text-sm text-muted-foreground">
-                          potential annual savings
+                          potential savings
                         </span>
                       </div>
                       <p className="text-xs text-muted-foreground mt-2">
@@ -414,14 +405,6 @@ export default function AnalysisResults({ data }: AnalysisResultsProps) {
               />
             </LineChart>
           </ChartContainer>
-          <Alert className="mt-4 border-orange-200 bg-orange-50 dark:bg-orange-950">
-            <AlertTriangle className="w-4 h-4" />
-            <AlertDescription>
-              <strong>Cash Flow Warning:</strong> You may experience cash
-              shortage around the 20th of the month. Consider timing your
-              expenses accordingly.
-            </AlertDescription>
-          </Alert>
         </CardContent>
       </Card>
 
@@ -458,65 +441,16 @@ export default function AnalysisResults({ data }: AnalysisResultsProps) {
 
       <Card>
         <CardHeader>
-          <CardTitle>Future Predictions</CardTitle>
+          <CardTitle>Financial Recommendations</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            <div className="p-4 border rounded-lg">
-              <h4 className="font-semibold mb-2">3-Month Forecast</h4>
-              <p className="text-muted-foreground mb-3">
-                Based on current spending trends
-              </p>
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span>Projected Expenses</span>
-                  <span className="font-semibold">
-                    {formatMoney(data.forecast.projectedExpenses)}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Expected Income</span>
-                  <span className="font-semibold text-green-600">
-                    {formatMoney(data.forecast.expectedIncome)}
-                  </span>
-                </div>
-                <Separator />
-                <div className="flex justify-between">
-                  <span className="font-semibold">Net Position</span>
-                  <span
-                    className={`font-semibold ${
-                      data.forecast.netPosition >= 0
-                        ? "text-green-600"
-                        : "text-red-600"
-                    }`}
-                  >
-                    {data.forecast.netPosition >= 0 ? "+" : ""}
-                    {formatMoney(Math.abs(data.forecast.netPosition))}
-                  </span>
-                </div>
-              </div>
-            </div>
-            <Alert className="border-blue-200 bg-blue-50 dark:bg-blue-950">
-              <TrendingUp className="w-4 h-4" />
-              <AlertDescription>
-                <strong>Year-End Projection:</strong>{" "}
-                {data.insights.yearEndProjection}
-              </AlertDescription>
-            </Alert>
-            <Alert className="border-purple-200 bg-purple-50 dark:bg-purple-950">
-              <Sparkles className="w-4 h-4" />
-              <AlertDescription>
-                <strong>Seasonal Alert:</strong> {data.insights.seasonalAlert}
-              </AlertDescription>
-            </Alert>
-            <Alert className="border-orange-200 bg-orange-50 dark:bg-orange-950">
-              <PiggyBank className="w-4 h-4" />
-              <AlertDescription>
-                <strong>Emergency Fund:</strong>{" "}
-                {data.insights.emergencyFundRecommendation}
-              </AlertDescription>
-            </Alert>
-          </div>
+          <Alert className="border-orange-200 bg-orange-50 dark:bg-orange-950">
+            <PiggyBank className="w-4 h-4" />
+            <AlertDescription>
+              <strong>Emergency Fund:</strong>{" "}
+              {data.insights.emergencyFundRecommendation}
+            </AlertDescription>
+          </Alert>
         </CardContent>
       </Card>
 

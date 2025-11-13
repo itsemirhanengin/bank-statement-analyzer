@@ -46,8 +46,6 @@ const analysisSchema = z.object({
   insights: z.object({
     weekendPattern: z.string(),
     peakHours: z.string(),
-    yearEndProjection: z.string(),
-    seasonalAlert: z.string(),
     emergencyFundRecommendation: z.string(),
   }),
   opportunities: z.array(
@@ -80,11 +78,6 @@ const analysisSchema = z.object({
       type: z.enum(["up", "down"]),
     })
   ),
-  forecast: z.object({
-    projectedExpenses: z.number(),
-    expectedIncome: z.number(),
-    netPosition: z.number(),
-  }),
 });
 
 export async function POST(req: Request) {
@@ -127,11 +120,13 @@ Important:
 - Detect recurring subscriptions (Netflix, Spotify, gym memberships, etc.)
 - Identify spending patterns by day of week
 - Detect anomalies and unusual transactions
-- Provide actionable recommendations
-- Calculate a financial health score based on income/expense ratio, savings rate, and spending patterns
+- Provide actionable recommendations based ONLY on the current statement data
+- Calculate a financial health score based on income/expense ratio, savings rate, and spending patterns shown in THIS statement
 - For weekdaySpending, use day names: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
 - For cashFlow, use day numbers (1-31)
-- Provide realistic insights and recommendations based on the actual data
+- Provide realistic insights and recommendations based ONLY on the actual data in this statement
+- DO NOT make future predictions, forecasts, or year-end projections
+- DO NOT reference past statements or future trends - analyze only what is in the current uploaded statement
 - Parse the data intelligently whether it's in JSON format (from Excel) or plain text format (from PDF)`;
 
     const result = await generateObject({
