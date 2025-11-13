@@ -1,0 +1,79 @@
+---
+alwaysApply: true
+---
+
+# Shadcn UI Component Guidelines
+
+## Component Library
+
+All shadcn/ui components are available under the `@/components/ui` path alias.
+
+## Import Convention
+
+Always import shadcn components from the `@/components/ui` directory:
+
+```typescript
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
+```
+
+## Available Components
+
+The project includes the following shadcn/ui components:
+
+- **Layout**: Card, Separator, Aspect Ratio, Resizable, Scroll Area, Sidebar
+- **Forms**: Button, Input, Textarea, Checkbox, Radio Group, Select, Switch, Slider, Calendar, Form, Field, Input Group, Input OTP
+- **Data Display**: Table, Badge, Avatar, Tooltip, Hover Card, Kbd, Empty, Chart, Progress, Skeleton, Spinner
+- **Feedback**: Alert, Alert Dialog, Dialog, Drawer, Sheet, Sonner (Toast)
+- **Navigation**: Breadcrumb, Dropdown Menu, Menubar, Navigation Menu, Tabs, Pagination, Command
+- **Overlay**: Popover, Context Menu, Tooltip
+- **Disclosure**: Accordion, Collapsible, Carousel
+- **Grouping**: Button Group, Toggle Group, Item
+
+## Usage Best Practices
+
+- **Prefer shadcn components** over custom implementations for standard UI patterns.
+- **Compose components** using shadcn's subcomponents (e.g., CardHeader, CardContent, CardFooter).
+- **Extend with Tailwind** classes using the `className` prop when customization is needed.
+- **Use variants** provided by components (e.g., Button variants: default, destructive, outline, secondary, ghost, link).
+- **Maintain consistency** by using shadcn components throughout the application.
+
+## Component Composition
+
+When building complex UI, compose shadcn components together:
+
+```typescript
+<Card>
+  <CardHeader>
+    <CardTitle>Title</CardTitle>
+    <CardDescription>Description</CardDescription>
+  </CardHeader>
+  <CardContent>
+    <Form>
+      <Field>
+        <Label>Email</Label>
+        <Input type="email" />
+      </Field>
+    </Form>
+  </CardContent>
+  <CardFooter>
+    <Button>Submit</Button>
+  </CardFooter>
+</Card>
+```
+
+## Styling Components
+
+- Use Tailwind classes via the `className` prop for custom styling.
+- Leverage component variants before creating custom styles.
+- Maintain the component's built-in accessibility features.
+- Don't override base component styles unless necessary.
+
+## Form Components
+
+- Use the `Form` component wrapper for form state management.
+- Combine `Field`, `Label`, and input components for form fields.
+- Use `Input Group` for inputs with icons or buttons.
+- Implement proper validation states using component variants.

@@ -1,0 +1,39 @@
+---
+alwaysApply: true
+---
+
+# Code Implementation Guidelines
+
+## Core Practices
+
+- Use early returns whenever possible to make the code more readable.
+- Use descriptive variable and function/const names.
+- Use consts instead of functions, for example, `const toggle = () => { }`. Also, define a type if possible.
+- Fully implement all requested functionality with no placeholders or TODOs.
+
+## Naming Conventions
+
+- Event functions should be named with a "handle" prefix:
+  - `handleClick` for onClick
+  - `handleKeyDown` for onKeyDown
+  - `handleSubmit` for onSubmit
+  - Follow this pattern consistently
+
+## Code Organization
+
+- Include all required imports at the top of files.
+- Ensure proper naming of key components.
+- Follow DRY principle (Don't Repeat Yourself).
+- Write bug-free, fully functional and working code.
+
+## Import Conventions
+
+- Import shadcn/ui components from `@/components/ui/*`:
+  ```typescript
+  import { Button } from "@/components/ui/button"
+  import { Card } from "@/components/ui/card"
+  ```
+- Import custom components from `@/components/*`
+- Import custom hooks from `@/hooks/*`
+- Import utilities from `@/lib/utils`
+- Group imports: React/Next, third-party, UI components, custom components, hooks, utilities

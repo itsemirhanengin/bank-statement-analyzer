@@ -1,0 +1,25 @@
+---
+alwaysApply: true
+---
+
+# Styling Guidelines
+
+## TailwindCSS Rules
+
+- Always use Tailwind classes for styling HTML elements.
+- Avoid using CSS or `<style>` tags.
+- Use "class:" instead of the ternary operator in class tags whenever possible.
+
+## Style Best Practices
+
+- Maintain consistent spacing and sizing using Tailwind utility classes.
+- Use Tailwind's responsive modifiers for responsive design (sm:, md:, lg:, xl:, 2xl:).
+- Leverage Tailwind's color palette and design tokens.
+- Prefer utility classes over custom CSS solutions.
+
+## UI Component Library
+
+- **Use shadcn/ui components** from `@/components/ui` for all standard UI patterns.
+- Style shadcn components using Tailwind classes via the `className` prop.
+- Leverage component variants (e.g., Button variants) before creating custom styles.
+- Maintain consistency by using the established component library throughout the application.

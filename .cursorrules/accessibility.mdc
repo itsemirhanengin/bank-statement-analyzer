@@ -1,0 +1,26 @@
+---
+alwaysApply: true
+---
+
+# Accessibility Guidelines
+
+## Implementation Requirements
+
+Implement accessibility features on all interactive elements:
+
+- Add `tabindex="0"` for keyboard navigation on non-standard interactive elements.
+- Include `aria-label` attributes for screen readers.
+- Implement both `onClick` and `onKeyDown` handlers for interactive elements.
+- Use semantic HTML elements when possible (button, nav, main, etc.).
+
+## Keyboard Interaction
+
+- Ensure all interactive elements are keyboard accessible.
+- Support Enter and Space keys for button-like interactions.
+- Implement proper focus management and visible focus indicators.
+
+## ARIA Attributes
+
+- Use appropriate ARIA roles when semantic HTML is insufficient.
+- Add descriptive labels for all form inputs and interactive elements.
+- Implement ARIA states (aria-expanded, aria-hidden, etc.) where appropriate.
