@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import FileUploader from "@/components/file-uploader";
-import AnalysisResults from "@/components/analysis-results";
+import { Dashboard } from "@/components/features/dashboard/dashboard";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertTriangle } from "lucide-react";
+import { AnalysisResult } from "@/lib/schemas";
 
 export default function Home() {
   const [file, setFile] = useState<File | null>(null);
@@ -14,8 +15,7 @@ export default function Home() {
     undefined
   );
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [showResults, setShowResults] = useState(false);
-  const [analysisData, setAnalysisData] = useState(null);
+  const [analysisData, setAnalysisData] = useState<AnalysisResult | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const handleAnalyze = async () => {
@@ -42,7 +42,6 @@ export default function Home() {
 
       const data = await response.json();
       setAnalysisData(data);
-      setShowResults(true);
     } catch (err) {
       console.error("Analysis error:", err);
       setError(
@@ -56,28 +55,36 @@ export default function Home() {
   const handleFileChange = (newFile: File | null, text?: string) => {
     setFile(newFile);
     setExtractedText(text);
+    setError(null);
+  };
+
+  const handleReset = () => {
+    setFile(null);
+    setExtractedText(undefined);
+    setAnalysisData(null);
+    setError(null);
   };
 
   return (
-    <div className="min-h-screen p-8 pb-20 sm:p-20">
-      <main className="max-w-4xl mx-auto space-y-8">
-        <div>
-          <h1 className="text-4xl font-bold mb-2 font-heading">
+    <div className="min-h-screen bg-background p-8 pb-20 sm:p-20 transition-colors duration-300">
+      <main className="max-w-5xl mx-auto space-y-12">
+        <div className="space-y-4 text-center sm:text-left">
+          <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl font-heading">
             Bank Statement Analyzer
           </h1>
-          <p className="text-muted-foreground">
-            {showResults
-              ? "Your comprehensive financial analysis"
-              : "Upload your bank statement to analyze your spending"}
+          <p className="text-xl text-muted-foreground max-w-2xl">
+            {analysisData
+              ? "Your comprehensive financial analysis is ready."
+              : "Upload your bank statement to unlock insights about your spending habits."}
           </p>
         </div>
 
-        {!showResults && (
-          <>
+        {!analysisData && (
+          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <FileUploader onFileChange={handleFileChange} />
 
             {error && (
-              <Alert className="border-red-200 bg-red-50 dark:bg-red-950">
+              <Alert variant="destructive">
                 <AlertTriangle className="w-4 h-4" />
                 <AlertDescription>{error}</AlertDescription>
               </Alert>
@@ -88,6 +95,7 @@ export default function Home() {
                 size="lg"
                 onClick={handleAnalyze}
                 disabled={!file || isAnalyzing}
+                className="w-full sm:w-auto font-semibold text-lg h-12 px-8"
               >
                 {isAnalyzing ? (
                   <>
@@ -99,26 +107,11 @@ export default function Home() {
                 )}
               </Button>
             </div>
-          </>
+          </div>
         )}
 
-        {showResults && analysisData && (
-          <>
-            <div className="flex justify-end">
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setShowResults(false);
-                  setFile(null);
-                  setAnalysisData(null);
-                  setError(null);
-                }}
-              >
-                Analyze Another Statement
-              </Button>
-            </div>
-            <AnalysisResults data={analysisData} />
-          </>
+        {analysisData && (
+          <Dashboard data={analysisData} onReset={handleReset} />
         )}
       </main>
     </div>

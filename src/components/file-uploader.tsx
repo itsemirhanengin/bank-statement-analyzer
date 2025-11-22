@@ -3,9 +3,9 @@
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 
-interface FileUploaderProps {
+type FileUploaderProps = {
   onFileChange: (file: File | null, extractedText?: string) => void;
-}
+};
 
 export default function FileUploader({ onFileChange }: FileUploaderProps) {
   const [file, setFile] = useState<File | null>(null);
@@ -16,7 +16,6 @@ export default function FileUploader({ onFileChange }: FileUploaderProps) {
   const extractPDFText = async (file: File): Promise<string> => {
     const pdfjsLib = await import("pdfjs-dist");
 
-    // Use local worker file from public directory
     if (!pdfjsLib.GlobalWorkerOptions.workerSrc) {
       pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdfjs/pdf.worker.min.mjs";
     }
