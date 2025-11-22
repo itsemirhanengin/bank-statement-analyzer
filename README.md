@@ -1,36 +1,96 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Bank Statement Analyzer
+
+## Project Overview
+
+The Bank Statement Analyzer is a sophisticated financial tool developed to transform raw bank statement data into actionable intelligence. By parsing standard financial documents, the application provides users with a comprehensive dashboard that visualizes spending habits, cash flow trends, and financial health metrics. This project demonstrates the application of modern web development practices to solve complex data visualization and analysis challenges in the fintech domain.
+
+## Key Features
+
+- **Comprehensive Dashboard**: A centralized hub displaying critical financial metrics and key performance indicators at a glance.
+- **Cash Flow Analysis**: Interactive visualizations tracking income versus expenses to monitor liquidity over time.
+- **Expense Categorization**: Detailed breakdown of spending patterns to identify major cost centers.
+- **Anomaly Detection**: Algorithmic identification of irregular transactions or potential security concerns.
+- **Financial Health Assessment**: specific scoring mechanisms to evaluate overall financial stability.
+- **Optimization Recommendations**: Data-driven suggestions for reducing costs and improving savings.
+- **Subscription Management**: Automated detection and listing of recurring payments.
+- **Document Parsing**: robust support for processing bank statements in both PDF and Excel formats.
+
+## Tech Stack
+
+This project utilizes a cutting-edge tech stack to ensure performance, scalability, and maintainability:
+
+- **Framework**: Next.js 16 (App Router)
+- **Core Library**: React 19
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS v4
+- **UI Components**: Radix UI, @shadcn/ui, Lucide React
+- **Data Visualization**: Recharts
+- **Form Management**: React Hook Form, Zod
+- **File Processing**: PDF.js, SheetJS (xlsx)
+- **AI & Analysis**: Vercel AI SDK
 
 ## Getting Started
 
-First, run the development server:
+Follow these steps to set up the project locally for development and testing purposes.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Prerequisites
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Ensure you have the following installed on your system:
+- Node.js (LTS version recommended)
+- npm, yarn, pnpm, or bun package manager
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Installation
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1.  **Clone the repository:**
 
-## Learn More
+    ```bash
+    git clone https://github.com/yourusername/bank-statement-analyzer.git
+    cd bank-statement-analyzer
+    ```
 
-To learn more about Next.js, take a look at the following resources:
+2.  **Install dependencies:**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+    ```bash
+    npm install
+    # or
+    yarn install
+    # or
+    pnpm install
+    # or
+    bun install
+    ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3.  **Run the development server:**
 
-## Deploy on Vercel
+    ```bash
+    npm run dev
+    # or
+    yarn dev
+    # or
+    pnpm dev
+    # or
+    bun dev
+    ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4.  **Access the application:**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+    Open your browser and navigate to `http://localhost:3000`.
+
+## Usage
+
+1.  Navigate to the upload section on the dashboard.
+2.  Select or drag and drop your bank statement file (PDF or Excel).
+3.  Allow the system to parse and analyze the data.
+4.  Explore the generated dashboard to review insights, charts, and recommendations.
+
+## Project Structure
+
+- `src/app`: Next.js App Router pages and API routes.
+- `src/components`: Reusable UI components and feature-specific widgets.
+- `src/services`: Core logic for file parsing and financial analysis.
+- `src/lib`: Utility functions and schema definitions.
+- `src/hooks`: Custom React hooks for state and logic management.
+
+## License
+
+This project is available for personal and educational use.
